@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: agentic-orchestration-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/shortener}
+    username: ${DATABASE_USERNAME:shortener}
+    password: ${DATABASE_PASSWORD:shortener}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: orchestration
+  flyway:
+    enabled: true
+    schemas: orchestration
+    default-schema: orchestration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  threads:
+    virtual:
+      enabled: true
+  ai:
+    openai:
+      # A placeholder keeps auto-configuration happy in stub mode; set a real key for openai mode.
+      api-key: ${OPENAI_API_KEY:stub-key-not-used}
+      chat:
+        options:
+          model: ${OPENAI_MODEL:gpt-4o-mini}
+          temperature: 0.2
+
+server:
+  port: 8081
+
+orchestrator:
+  llm:
+    # stub = deterministic, keyless agent outputs (demo/tests); openai = real LLM calls
+    mode: ${ORCHESTRATOR_LLM_MODE:stub}
+  retry:
+    max-attempts: 3
+    backoff-ms: 250
+  tools:
+    maven:
+      # When true, BuildGate/TestGate execute real `mvn compile` / `mvn test` against the codebase.
+      enabled: ${ORCHESTRATOR_MAVEN_ENABLED:false}
+      executable: ${ORCHESTRATOR_MAVEN_EXECUTABLE:mvn}
+      timeout-seconds: 600
+  codebase-root: ${CODEBASE_ROOT:${user.dir}/url-shortener-service}
+  workspace-root: ${WORKSPACE_ROOT:${user.dir}/runs}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true

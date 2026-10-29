@@ -21,6 +21,8 @@
 | 9 | [09-observability.md](09-observability.md) | Metrics, tracing, audit, alerting |
 | 10 | [10-risks-and-tradeoffs.md](10-risks-and-tradeoffs.md) | Risks, mitigations, trade-offs |
 | 11 | [11-implementation-tasks.md](11-implementation-tasks.md) | Ordered task breakdown for implementation |
+| 12 | [12-orchestration-flow-diagram.md](12-orchestration-flow-diagram.md) | Mermaid flow diagrams of the implemented orchestration service |
+| 13 | [13-quickstart-and-prompts.md](13-quickstart-and-prompts.md) | Quickstart: start/test the orchestration service, sample prompts |
 
 ---
 

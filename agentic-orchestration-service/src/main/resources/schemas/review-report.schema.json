@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReviewReport",
+  "type": "object",
+  "required": ["findings", "summary"],
+  "properties": {
+    "summary": { "type": "string" },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "category", "description", "resolved"],
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "type": "string", "enum": ["BLOCKER", "MAJOR", "MINOR", "INFO"] },
+          "category": { "type": "string" },
+          "file": { "type": "string" },
+          "description": { "type": "string" },
+          "resolved": { "type": "boolean" },
+          "mitigation": { "type": "string" }
+        }
+      }
+    }
+  }
+}

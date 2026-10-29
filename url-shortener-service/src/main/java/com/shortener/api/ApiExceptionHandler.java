@@ -2,6 +2,7 @@ package com.shortener.api;
 
 import com.shortener.application.InvalidAliasException;
 import com.shortener.application.InvalidUrlException;
+import com.shortener.application.ServiceTemporarilyUnavailableException;
 import com.shortener.application.ShortCodeAlreadyExistsException;
 import com.shortener.application.UrlExpiredException;
 import com.shortener.application.UrlNotFoundException;
@@ -34,6 +35,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(UrlExpiredException.class)
     ProblemDetail gone(UrlExpiredException exception) {
         return problem(HttpStatus.GONE, exception.getMessage());
+    }
+
+    @ExceptionHandler(ServiceTemporarilyUnavailableException.class)
+    ProblemDetail unavailable(ServiceTemporarilyUnavailableException exception) {
+        return problem(HttpStatus.SERVICE_UNAVAILABLE, exception.getMessage());
     }
 
     @ExceptionHandler({ConstraintViolationException.class, MethodArgumentNotValidException.class})

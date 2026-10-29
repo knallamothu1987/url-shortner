@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RequirementSpec",
+  "type": "object",
+  "required": ["intent", "normalizedProblem", "functionalRequirements", "ambiguities", "acceptanceCriteria"],
+  "properties": {
+    "intent": { "type": "string", "minLength": 1 },
+    "normalizedProblem": { "type": "string", "minLength": 1 },
+    "functionalRequirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "severity"],
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" },
+          "severity": { "type": "string", "enum": ["BLOCKER", "MAJOR", "MINOR"] },
+          "proposedResolution": { "type": "string" }
+        }
+      }
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "dependencyHints": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

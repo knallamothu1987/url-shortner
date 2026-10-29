@@ -26,6 +26,23 @@ security:
 url-shortener:
   public-base-url: ${PUBLIC_BASE_URL:http://localhost:8080}
   code-length: ${SHORT_CODE_LENGTH:6}
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    limit: ${RATE_LIMIT_PER_WINDOW:30}
+    window-seconds: ${RATE_LIMIT_WINDOW_SECONDS:60}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      database:
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 15s
+        permitted-number-of-calls-in-half-open-state: 3
+        ignore-exceptions:
+          - com.shortener.application.UrlNotFoundException
+          - com.shortener.application.UrlExpiredException
 
 management:
   endpoints:

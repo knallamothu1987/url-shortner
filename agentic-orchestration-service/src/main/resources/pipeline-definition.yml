@@ -1,0 +1,56 @@
+# Explicit SDLC dependency graph executed by the Orchestrator.
+# - Sequential and parallel paths: design-docs runs in parallel with implementation/testing/review.
+# - release-readiness is the synchronization point of both branches.
+# - Gates run in order; approval gates are conditional and must be listed last.
+name: sdlc-pipeline
+stages:
+  - name: requirements
+    agent: requirement
+    dependsOn: []
+    exitGates:
+      - schema:requirement-spec
+      - policy
+      - approval:clarification        # raised only when BLOCKER ambiguities remain
+
+  - name: design
+    agent: design
+    dependsOn: [requirements]
+    exitGates:
+      - schema:design-spec
+      - openapi
+      - policy
+      - approval:schema-migration     # raised only when the design changes the DB schema
+
+  - name: design-docs                 # parallel branch: design-level docs while code is built
+    agent: documentation
+    dependsOn: [design]
+    exitGates:
+      - policy
+
+  - name: implementation
+    agent: implementation
+    dependsOn: [design]
+    exitGates:
+      - build
+      - policy
+
+  - name: testing
+    agent: test
+    dependsOn: [implementation]
+    exitGates:
+      - test
+      - policy
+
+  - name: review
+    agent: review
+    dependsOn: [testing]
+    exitGates:
+      - schema:review-report
+      - policy
+      - approval:major-findings       # raised only when unresolved MAJOR findings exist
+
+  - name: release-readiness           # sync point: waits for review AND design-docs
+    agent: documentation
+    dependsOn: [review, design-docs]
+    exitGates:
+      - policy

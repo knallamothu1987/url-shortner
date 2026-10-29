@@ -1,0 +1,17 @@
+# No-Docker local profile: embedded H2 (PostgreSQL compatibility mode) instead of
+# Postgres, Redis health check disabled. Run with: -Dspring-boot.run.profiles=local
+spring:
+  datasource:
+    url: jdbc:h2:mem:shortener;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ''
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      # H2 maps some Postgres types differently (e.g. TEXT); skip strict validation locally.
+      ddl-auto: none
+
+management:
+  health:
+    redis:
+      enabled: false
